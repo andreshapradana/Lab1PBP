@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .navbar{
+        background-color: aqua;
+    }
+    .wishlist{
+        background-color: bisque;
+    }
+    html{
+        background-color: bisque;
+    }
+</style>
+<nav class="navbar">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">Halo, Andresha Pradana! :D</span>
+      <button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+    </div>
+  </nav>
+
+<div class = "wishlist">
+    <br/>
+    <h5>Nama: </h5>
+    <p>{{nama}}</p>
+    <table class="tablewishlist">
+            <th>Nama Barang</th>
+            <th>Harga Barang</th>
+            <th>Deskripsi</th>
+        {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+        <tbody id="table-body"></tbody>
+    </table>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        $.get('/wishlist/json', function (data) {
+        data.map((singleData) =>
+            $('#table-body').append(`<tr>
+        <td>${singleData.fields.nama_barang}</td>
+        <td>${singleData.fields.harga_barang}</td>
+        <td>${singleData.fields.deskripsi}</td>
+    </tr>`)
+        );
+        });
+    });
+    </script>
+
+    <h6>Sesi terakhir login: {{ last_login }}</h6>
+    <a href="{% url 'wishlist:create_wishlist' %}" class="btn btn-success"
+    >Tambah Wishlist</a
+  >
+  <a href="{% url 'wishlist:logout' %}" class="btn btn-danger">Logout</a>
+
+</div>  
+{% endblock content %}
